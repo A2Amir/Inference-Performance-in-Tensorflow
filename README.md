@@ -64,7 +64,7 @@ The [load_graph method](https://github.com/A2Amir/Inference-Performance-in-Tenso
 A TensorFlow model is defined as a static graph through which data flows. Graphs are versatile data structures that can be mutated in various ways. TensorFlow takes advantage of this through graph transforms. A transform takes a graph as input, alters it, and returns a new graph as output. Note the original graph used as input is not mutated in place, so remains unaltered. A detailed discussion of many available transforms and how to apply them is found [here](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/tools/graph_transforms/#introduction). While this information is not required for this lesson, it is worth a read to become familiar with the topic.
 
 <p align="right">
-<img src="./imgs/2.png" width="500" height="350"/>
+<img src="./imgs/2.png" width="500" height="300"/>
 <p align="right">
  
 Several transforms can be chained together, typically this is done with a theme in mind. For example, I might want to reduce the graph size, optimize it for inference, create an 8-bit version of the graph, etc. In the following sections I will discuss two sequences of transforms:
