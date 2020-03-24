@@ -8,6 +8,6 @@ But autonomous vehicles are more demanding than just identifying hotdogs. The pe
 For example, semantic segmentation is computationally intensive. It's not uncommon for this pipeline to put out four to seven frame per second, while bounding boxes such as YOLO run at 40 to 90 FPS.
 
 <p align="right">
-<img src="./img/1.png" />
+<img src="./imgs/1.png" width="500" height="350"/>
 <p align="right">
  
