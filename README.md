@@ -55,7 +55,22 @@ For these reasons, freezing the graph is commonly the first transform engineers 
  * I provide a slightly different version which is simpler and that I found handy. (see this [code](https://github.com/A2Amir/Inference-Performance-in-Tensorflow/blob/master/Code/freez_graph.ipynb)).
 
 
-# 2. Using freezed Graphs
+# 3. Using freezed Graphs
 
 The [load_graph method](https://github.com/A2Amir/Inference-Performance-in-Tensorflow/blob/master/Code/load_froozen_graph.ipynb) takes a binary protobuf file as input and returns the graph. When the graph is loaded I can take list of operations to make prediction. Check this exercise to get more familiar with using a binary protobuf file to make prediction.
+
+# 4. Graph Transforms
+
+A TensorFlow model is defined as a static graph through which data flows. Graphs are versatile data structures that can be mutated in various ways. TensorFlow takes advantage of this through graph transforms. A transform takes a graph as input, alters it, and returns a new graph as output. Note the original graph used as input is not mutated in place, so remains unaltered. A detailed discussion of many available transforms and how to apply them is found [here](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/tools/graph_transforms/#introduction). While this information is not required for this lesson, it is worth a read to become familiar with the topic.
+
+<p align="right">
+<img src="./imgs/2.png" width="500" height="350"/>
+<p align="right">
+ 
+Several transforms can be chained together, typically this is done with a theme in mind. For example, I might want to reduce the graph size, optimize it for inference, create an 8-bit version of the graph, etc. In the following sections I will discuss two sequences of transforms:
+
+1.	Optimizing for Inference
+
+2.	Performing 8-bit Calculations
+
 
