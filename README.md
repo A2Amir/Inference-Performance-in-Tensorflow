@@ -15,7 +15,7 @@ Semantic segmentation has advantages over bounding boxes obviously. But in its c
 
 # 2. Freezing Graphs
 
-Prior to applying any optimizations I will want to freeze the TensorFlow Graph such that it's self-contained in a single protobuf file. Freezing the graph is the process of converting TensorFlow variables into constants. During inference, variables become unnecessary since the values they store don’t change. I might as well convert them to constants, which the computer can work with faster.
+Prior to applying any optimizations I will want to freeze the TensorFlow Graph such that it's self-contained in a single [protobuf](https://developers.google.com/protocol-buffers/) file. Freezing the graph is the process of converting TensorFlow variables into constants. During inference, variables become unnecessary since the values they store don’t change. I might as well convert them to constants, which the computer can work with faster.
 
 Additional benefits of freezing the graph are:
 
@@ -53,4 +53,9 @@ For these reasons, freezing the graph is commonly the first transform engineers 
   The result is saved in the frozen_graph.pb file. 
 
  * I provide a slightly different version which is simpler and that I found handy. (see this [code](https://github.com/A2Amir/Inference-Performance-in-Tensorflow/blob/master/Code/freez_graph.ipynb)).
+
+
+# 2. Using freezed Graphs
+
+The [load_graph method](https://github.com/A2Amir/Inference-Performance-in-Tensorflow/blob/master/Code/load_froozen_graph.ipynb) takes a binary protobuf file as input and returns the graph. When the graph is loaded I can take list of operations to make prediction. Check this exercise to get more familiar with using a binary protobuf file to make prediction.
 
