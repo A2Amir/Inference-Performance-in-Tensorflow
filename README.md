@@ -74,3 +74,54 @@ Several transforms can be chained together, typically this is done with a theme 
 2.	Performing 8-bit Calculations
 
 
+ ## 4.1. Optimizing for Inference
+ 
+ Once the graph is frozen there are a variety of transformations that can be performed; dependent on what I wish to achieve. TensorFlow    has packaged up some inference optimizations in a tool aptly called optimize_for_inference.
+ 
+ optimize_for_inference does the following:
+ 
+ * Removes training-specific and debug-specific nodes
+ * Fuses common operations
+ * Removes entire sections of the graph that are never reached
+ 
+ Here’s how it can be used:
+ 
+ ~/tensorflow/bazel-bin/tensorflow/python/tools/optimize_for_inference \
+ 
+--input=frozen_graph.pb \
+--output=optimized_graph.pb \
+--frozen_graph=True \
+--input_names=image_input \
+--output_names=Softmax
+
+I'll use the graph I just froze as the input graph. output is the name of the output graph; I’ll be creative and call it optimized_graph.pb. 
+
+The optimize_for_inference tool works for both frozen and unfrozen graphs, so I have to specify whether the graph is already frozen or not with frozen_graph.
+
+input_names and output_names are the names of the input and output nodes respectively. As the option names suggest, there can be more than one input or output node, separated by commas.
+
+Let’s take a look at the other way to use  optimize for inference function in the jupyter note book. Check [this exercise](https://github.com/A2Amir/Inference-Performance-in-Tensorflow/blob/master/Code/OptimizingForInference.ipynb) to get more familiar with this function
+
+### Fusion
+
+The fusion reduces the number of operations and accelerates the data passing through the graph. Consider a three layer pipeline (see gif below): batch normalization, feeding into a Relu, feeding into a convolution. 
+
+The implementations above require each layer to store temporary tensors. I can fuse all three operations together and avoid storing all these extra tensors. Even better, the fuse operation only execute one kernel on the GPU instead of three. 
+
+<p align="right">
+<img src="./imgs/1.gif" width="500" height="300"/>
+<p align="right">
+
+Each time a kernel is called, there is an overhead. Fusing kernels limits the overhead so the overall applications runs faster. Fusing saves both memory and time. 
+
+
+Fusing could be beneficial in training as well as inference. The trade-off is that fusing reduces the flexibility of the network. During training, I might want to preserve the flexibility of the model in case I want to add or remove layers or transfer part of the network. By the time I get to inference, I am no longer changing the network architecture, so I can fuse operations more aggressively. 
+
+
+It's important to know I could do fusing manually by coding up a single kernel that performs the three fuse operations together. However, the compiler is capable of doing this on its own, allowing me to write understandable code and still reap performance benefits. 
+I can automate this process using an optimizer that will fuse common layers together. This allow me to write easier to understand code and manipulate it, while the final version after the optimization, will have all the performance advantages by applying tricks like fusion automatically. 
+
+
+
+
+ 
