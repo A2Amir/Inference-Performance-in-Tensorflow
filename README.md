@@ -189,7 +189,8 @@ I have covered freezing the graph and optimizing for inference, but I haven’t 
     strip_unused_nodes
     sort_by_execution_order'
 
-There’s a lot going on here, which you can find more information in the TensorFlow Graph Transforms documentation. 
-The gist is that fold transforms look for subgraphs that always evaluate to  the same result. Then they consolidate each such subgraph into one Constant node. 
+There’s a lot going on here, which you can find more information in the [TensorFlow Graph Transforms documentation](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/tools/graph_transforms/README.md). The gist is that fold transforms look for subgraphs that always evaluate to the same result. Then they consolidate each such subgraph into one Constant node.
+
 quantize_weights converts all the operations in the graph that have eight-bit quantized equivalents, and leaves the rest in floating point. It also adds nodes to convert back to floating point. The quantize_weights transform is mainly for reducing graph size. For the desired quantization computation behaviour we’ll need to use quantize_nodes as well.
 
+The other way to use 8-bit Calculations function in the jupyter notebook. Check [this exercise](https://github.com/A2Amir/Inference-Performance-in-Tensorflow/blob/master/Code/8-bitCalculations.ipynb) to get more familiar with this function.
