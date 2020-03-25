@@ -34,13 +34,14 @@ For these reasons, freezing the graph is commonly the first transform engineers 
    ~~~python
    from tensorflow.python.tools.freeze_graph import freeze_graph
    ~~~
-   ~/tensorflow/bazel-bin/tensorflow/python/tools/freeze_graph \
+   
+      ~/tensorflow/bazel-bin/tensorflow/python/tools/freeze_graph \
 
-    --input_graph=base_graph.pb \
-    --input_checkpoint=ckpt \
-    --input_binary=true \
-    --output_graph=frozen_graph.pb \
-    --output_node_names=Softmax
+      --input_graph=base_graph.pb \
+      --input_checkpoint=ckpt \
+      --input_binary=true \
+      --output_graph=frozen_graph.pb \
+      --output_node_names=Softmax
 
   The freeze_graph function requires five inputs:
   
@@ -107,13 +108,13 @@ Once the graph is frozen there are a variety of transformations that can be perf
  
  Here’s how it can be used:
  
- ~/tensorflow/bazel-bin/tensorflow/python/tools/optimize_for_inference \
- 
---input=frozen_graph.pb \
---output=optimized_graph.pb \
---frozen_graph=True \
---input_names=image_input \
---output_names=Softmax
+     ~/tensorflow/bazel-bin/tensorflow/python/tools/optimize_for_inference \
+
+    --input=frozen_graph.pb \
+    --output=optimized_graph.pb \
+    --frozen_graph=True \
+    --input_names=image_input \
+    --output_names=Softmax
 
 I'll use the graph I just froze as the input graph. output is the name of the output graph; I’ll be creative and call it optimized_graph.pb. 
 
@@ -165,6 +166,30 @@ There are a variety of ways to convert the floating point values to integers. Th
 <img src="./imgs/2.gif" width="600" height="350"/>
 <p align="right">
  
-**Notice:** it's easy to convert back to a floating point number if need be as well. With just this small change, we save 75% in this pace. 
+**Notice:** it's easy to convert back to a floating point number if it needs. 
 
- 
+## 8-bit Calculations
+
+I have covered freezing the graph and optimizing for inference, but I haven’t yet covered quantization. So the next optimization I will discuss is converting the graph to perform 8-bit calculations. Here’s an example using the **transform_graph** tool:
+
+    ~/tensorflow/bazel-bin/tensorflow/tools/graph_transforms/transform_graph \
+    --in_graph=frozen_graph.pb \
+    --out_graph=eightbit_graph.pb \
+    --inputs=image_input \
+    --outputs=Softmax \
+    --transforms='
+    add_default_attributes
+    remove_nodes(op=Identity, op=CheckNumerics)
+    fold_constants(ignore_errors=true)
+    fold_batch_norms
+    fold_old_batch_norms
+    fuse_resize_and_conv
+    quantize_weights
+    quantize_nodes
+    strip_unused_nodes
+    sort_by_execution_order'
+
+There’s a lot going on here, which you can find more information in the TensorFlow Graph Transforms documentation. 
+The gist is that fold transforms look for subgraphs that always evaluate to  the same result. Then they consolidate each such subgraph into one Constant node. 
+quantize_weights converts all the operations in the graph that have eight-bit quantized equivalents, and leaves the rest in floating point. It also adds nodes to convert back to floating point. The quantize_weights transform is mainly for reducing graph size. For the desired quantization computation behaviour we’ll need to use quantize_nodes as well.
+
