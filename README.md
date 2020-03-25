@@ -58,7 +58,7 @@ For these reasons, freezing the graph is commonly the first transform engineers 
 
 # 3. Using frozen Graphs
 
-The [load_graph method](https://github.com/A2Amir/Inference-Performance-in-Tensorflow/blob/master/Code/load_froozen_graph.ipynb) takes a binary protobuf file as input and returns the graph. When the graph is loaded I can take list of operations to make prediction. Check this exercise to get more familiar with using a binary protobuf file to make prediction.
+Once the graph is loaded I can access operations and tensors with the **get_operation_by_name and get_tensor_by_name tf.Graph** methods respectively. I could also retrieve all the operations with of a tf.Graph with the get_operations method, which is very useful if I am unsure which operation to use. The [load_graph method](https://github.com/A2Amir/Inference-Performance-in-Tensorflow/blob/master/Code/load_froozen_graph.ipynb) takes a binary protobuf file as input and returns the graph. When the graph is loaded I can take list of operations to make prediction. Check this exercise to get more familiar with using a binary protobuf file to make prediction.
 
 # 4. Graph Transforms
 
