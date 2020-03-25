@@ -125,7 +125,29 @@ Let’s take a look at the other way to use  optimize for inference function in 
 
 
 
+ ## 4.1. Performing 8-bit Calculations
+ 
+ Before performing 8-bit calculation you should know reducing Precision and Quantization Conversion.
+ 
+ ## Reducing Precision
+
+Neural networks are typically trained with single precision (32-bit floating point number). It has 23-bit significand that can do significant digits used in science disciplines. 
+
+Double precision or 64-bit floats have 52 significant digits but turns out that level of precision is not needed in neural nets. So, most training is done in single precision. But it turns out we don't even need single precision for all the task, especially something like inferencing. 
+
+<p align="right">
+<img src="./imgs/3.png" width="600" height="350"/>
+<p align="right">
 
 
+ Using half precision or 16-bits with 11 significant at even lower positions, results in minimal changes in accuracy and does produce savings in time and memory. Essentially, I can increase the bandwidth to double with 16-bits compared to 32-bits. 
 
  
+Note: Pushing precision to the limit is an active area of research. In fact, some results have been published only using one bit weights. The main issue when training neural network using lower precision is the effect on back propagation. The error caused by lower precision is amplified at each stage of the backward pass through the whole network. Backward passes only happen during training though. So, for inferencing this is a non issue and we can happily reduce precision. 
+
+
+Typically, we convert floating point values to an 8 bit integer representation for 256 unique values. For example, zero to 255. This specific reduction in precision from floating points to integers introduces another type of optimization. The process of constraining values (see below) from a continuous range to a discrete range, is known as quantization. 
+
+<p align="right">
+<img src="./imgs/4.png" width="600" height="350"/>
+<p align="right">
