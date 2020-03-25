@@ -55,7 +55,7 @@ For these reasons, freezing the graph is commonly the first transform engineers 
  * I provide a slightly different version which is simpler and that I found handy. (see this [code](https://github.com/A2Amir/Inference-Performance-in-Tensorflow/blob/master/Code/freez_graph.ipynb)).
 
 
-# 3. Using freezed Graphs
+# 3. Using frozen Graphs
 
 The [load_graph method](https://github.com/A2Amir/Inference-Performance-in-Tensorflow/blob/master/Code/load_froozen_graph.ipynb) takes a binary protobuf file as input and returns the graph. When the graph is loaded I can take list of operations to make prediction. Check this exercise to get more familiar with using a binary protobuf file to make prediction.
 
@@ -76,7 +76,7 @@ Several transforms can be chained together, typically this is done with a theme 
 
  ## 4.1. Optimizing for Inference
  
- ### Fusion
+ ## Fusion
 
 Before starting Optimizing for Inference you should have some Information about fusion. The fusion reduces the number of operations and accelerates the data passing through the graph. Consider a three layer pipeline (see gif below): batch normalization, feeding into a Relu, feeding into a convolution. 
 
@@ -95,9 +95,9 @@ Fusing could be beneficial in training as well as inference. The trade-off is th
 It's important to know I could do fusing manually by coding up a single kernel that performs the three fuse operations together. However, the compiler is capable of doing this on its own, allowing me to write understandable code and still reap performance benefits. 
 I can automate this process using an optimizer that will fuse common layers together. This allow me to write easier to understand code and manipulate it, while the final version after the optimization, will have all the performance advantages by applying tricks like fusion automatically. 
  
- ### Optimizing for Inference
+ ## Optimizing for Inference
 
-Once the graph is frozen there are a variety of transformations that can be performed; dependent on what I wish to achieve. TensorFlow    has packaged up some inference optimizations in a tool aptly called optimize_for_inference.**
+Once the graph is frozen there are a variety of transformations that can be performed; dependent on what I wish to achieve. TensorFlow    has packaged up some inference optimizations in a tool aptly called optimize_for_inference.
  
  optimize_for_inference does the following:
  
