@@ -125,7 +125,7 @@ Let’s take a look at the other way to use  optimize for inference function in 
 
 
 
- ## 4.1. Performing 8-bit Calculations
+ ## 4.2. Performing 8-bit Calculations
  
  Before performing 8-bit calculation you should know reducing Precision and Quantization Conversion.
  
@@ -151,3 +151,20 @@ Typically, we convert floating point values to an 8 bit integer representation f
 <p align="right">
 <img src="./imgs/4.png" width="600" height="350"/>
 <p align="right">
+ 
+Using integers instead of floating points has the following advantages:
+* Integer arithmetic can be faster than floating point arithmetic
+* Low Memory Footprint
+* More Arithmetic Throughput
+
+## Quantization Conversion
+
+There are a variety of ways to convert the floating point values to integers. The simplest is a linear conversion. A convenient characteristics of neural network weights is they inhibit a relatively small range. For example, in the  layer below, weights might range from -8 to 10. To perform a linear conversion we would assign -8 to 0, 1 to 128 and 10 to 255, and all the values in between accordingly. 
+
+<p align="right">
+<img src="./imgs/2.gif" width="600" height="350"/>
+<p align="right">
+ 
+**Notice:** it's easy to convert back to a floating point number if need be as well. With just this small change, we save 75% in this pace. 
+
+ 
